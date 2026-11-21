@@ -1,5 +1,7 @@
 # Joy Monday brief
 
+[View the live Streamlit app](https://quick-commerce-analytics-5pdelxiwjvtlprtvdthl65.streamlit.app/)
+
 ## The problem
 
 Joy sells personal care products on Blinkit, Zepto and Swiggy Instamart. Every week the Quick
@@ -47,7 +49,6 @@ pip install -r requirements.txt
 **Web app** (pick the week, upload your own CSVs, expand charts):
 
 ```
-cd monday_brief
 streamlit run app.py
 ```
 
@@ -59,7 +60,6 @@ history before the week you care about, because the baselines need it.
 **Command line** (writes files to `out/`):
 
 ```
-cd monday_brief
 python run.py                      # Monday 16 Nov 2026
 python run.py --asof 2026-10-19    # any other Monday
 python -m unittest discover -s tests
@@ -90,8 +90,8 @@ purpose; what was found and how it is handled is in `HOW_IT_WORKS.md` section 3.
 
 The app is ready to deploy on Streamlit Community Cloud:
 
-1. Put the contents of `monday_brief/` in a public GitHub repository (including `data/`,
-   `.streamlit/`, and `requirements.txt`).
+1. Put this project in a public GitHub repository, including `data/`, `.streamlit/`, and
+   `requirements.txt`.
 2. On share.streamlit.io choose "Create app", pick the repository, and set the main file to
    `app.py`.
 
