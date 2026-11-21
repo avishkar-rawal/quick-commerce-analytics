@@ -105,8 +105,46 @@ with t_brief:
     st.download_button("Download this page (HTML)", page, f"monday_{asof:%Y-%m-%d}.html", "text/html")
 
 with t_table:
+    st.subheader("Alert kind definitions")
+    components.html(
+        """
+        <style>
+        body { margin: 0; font-family: "Source Sans Pro", sans-serif; font-size: 14px;
+               line-height: 1.55; color: #262730; }
+        p { margin: 0 0 10px 0; }
+        .baseline { position: relative; color: #3b82f6; text-decoration: underline;
+                    text-decoration-thickness: 1px; text-underline-offset: 3px;
+                    cursor: help; }
+        .baseline::after { content: attr(data-tooltip); position: absolute; z-index: 10000;
+                           left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
+                           width: max-content; max-width: 280px; padding: 8px 10px;
+                           border-radius: 6px; background: #1f2937; color: #fff;
+                           font-size: 12px; line-height: 1.35; text-align: left;
+                           box-shadow: 0 4px 12px rgba(0,0,0,.18); opacity: 0;
+                           visibility: hidden; pointer-events: none;
+                           transition: opacity .12s ease; }
+        .baseline:hover::after, .baseline:focus::after { opacity: 1; visibility: visible; }
+        </style>
+        <p><b>FILL</b> — The warehouse received much less than it ordered: fill is below 70% and at least 20 units are short.</p>
+        <p><b>NOPO</b> — The warehouse stopped placing purchase orders for a product it previously ordered regularly.</p>
+        <p><b>RANK</b> — The product's search rank worsened by at least 3 places while stock was fine (at least 80% availability) and sales fell below expected.</p>
+        <p><b>AVAIL</b> — Availability fell at least 15 percentage points below its
+           <span class="baseline" tabindex="0" data-tooltip="The clean baseline is the median of the latest 4 non-problem availability weeks; it starts after 2 clean weeks.">baseline</span>
+           and the shortage is not already explained by a FILL or NOPO alert.</p>
+        """,
+        height=180,
+        scrolling=False,
+    )
     df = report.alerts_frame(alerts)
-    st.dataframe(df, hide_index=True)
+    st.dataframe(
+        df,
+        hide_index=True,
+        column_config={
+            "responsible_team": st.column_config.TextColumn(
+                "Responsible team",
+                help="The team responsible for taking action on this alert"),
+        },
+    )
     st.download_button("Download alerts.csv", df.to_csv(index=False), "alerts.csv", "text/csv")
 
 with t_msg:
@@ -124,6 +162,36 @@ with t_replay:
                "to be lost, for that alert on that date (rough estimate, about +/-30%).\n\n"
                "**skus**: the product codes in the alert. A SKU is Joy's own internal code for one "
                "product and pack size, e.g. JY-FW-NEEM-100 = Neem Face Wash 100ml.")
+    st.subheader("Alert kind definitions")
+    components.html(
+        """
+        <style>
+        body { margin: 0; font-family: "Source Sans Pro", sans-serif; font-size: 14px;
+               line-height: 1.55; color: #262730; }
+        p { margin: 0 0 10px 0; }
+        .baseline { position: relative; color: #3b82f6; text-decoration: underline;
+                    text-decoration-thickness: 1px; text-underline-offset: 3px;
+                    cursor: help; }
+        .baseline::after { content: attr(data-tooltip); position: absolute; z-index: 10000;
+                           left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
+                           width: max-content; max-width: 280px; padding: 8px 10px;
+                           border-radius: 6px; background: #1f2937; color: #fff;
+                           font-size: 12px; line-height: 1.35; text-align: left;
+                           box-shadow: 0 4px 12px rgba(0,0,0,.18); opacity: 0;
+                           visibility: hidden; pointer-events: none;
+                           transition: opacity .12s ease; }
+        .baseline:hover::after, .baseline:focus::after { opacity: 1; visibility: visible; }
+        </style>
+        <p><b>FILL</b> — The warehouse received much less than it ordered: fill is below 70% and at least 20 units are short.</p>
+        <p><b>NOPO</b> — The warehouse stopped placing purchase orders for a product it previously ordered regularly.</p>
+        <p><b>RANK</b> — The product's search rank worsened by at least 3 places while stock was fine (at least 80% availability) and sales fell below expected.</p>
+        <p><b>AVAIL</b> — Availability fell at least 15 percentage points below its
+           <span class="baseline" tabindex="0" data-tooltip="The clean baseline is the median of the latest 4 non-problem availability weeks; it starts after 2 clean weeks.">baseline</span>
+           and the shortage is not already explained by a FILL or NOPO alert.</p>
+        """,
+        height=180,
+        scrolling=False,
+    )
     st.dataframe(bt, hide_index=True, column_config={
         "at_risk_in_Rupees": st.column_config.NumberColumn(
             "at_risk_in_Rupees", help="Estimated Rs per week at risk on that report date", format="%d"),

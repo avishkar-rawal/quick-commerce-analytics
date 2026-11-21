@@ -382,7 +382,7 @@ def render(data, alerts, bt, asof, n_lines, known=True):
 
 def alerts_frame(alerts):
     return pd.DataFrame([dict(
-        kind=a.kind, status=a.status, owner=a.owner, platform=a.platform, city=a.city,
+        kind=a.kind, status=a.status, responsible_team=a.owner, platform=a.platform, city=a.city,
         warehouse=a.warehouse, products="; ".join(l["sku"] for l in a.lines),
         onset=a.onset.date(), weeks_open=a.weeks_open, at_risk_per_week=round(a.at_risk),
         lost_so_far=round(a.lost)) for a in alerts])
