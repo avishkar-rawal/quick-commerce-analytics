@@ -140,9 +140,39 @@ with t_table:
         df,
         hide_index=True,
         column_config={
+            "kind": st.column_config.TextColumn(
+                "Kind",
+                help="Alert type: FILL (short delivery), NOPO (orders stopped), RANK (search position fell), or AVAIL (availability fell)"),
+            "status": st.column_config.TextColumn(
+                "Status",
+                help="Open means the issue is still active; resolved means it has recovered"),
             "responsible_team": st.column_config.TextColumn(
                 "Responsible team",
                 help="The team responsible for taking action on this alert"),
+            "platform": st.column_config.TextColumn(
+                "Platform",
+                help="Quick-commerce platform for this alert"),
+            "city": st.column_config.TextColumn(
+                "City",
+                help="City for the affected warehouse"),
+            "warehouse": st.column_config.TextColumn(
+                "Warehouse",
+                help="Platform warehouse affected by the alert"),
+            "products": st.column_config.TextColumn(
+                "Products",
+                help="Internal SKUs grouped under this alert"),
+            "onset": st.column_config.TextColumn(
+                "Onset",
+                help="Date the alert problem was first detected"),
+            "weeks_open": st.column_config.NumberColumn(
+                "Weeks open",
+                help="Number of weeks the alert has been open"),
+            "at_risk_per_week": st.column_config.NumberColumn(
+                "At risk per week",
+                help="Estimated rupees of sales at risk each week"),
+            "lost_so_far": st.column_config.NumberColumn(
+                "Lost so far",
+                help="Estimated rupees lost since the alert began"),
         },
     )
     st.download_button("Download alerts.csv", df.to_csv(index=False), "alerts.csv", "text/csv")
@@ -193,10 +223,30 @@ with t_replay:
         scrolling=False,
     )
     st.dataframe(bt, hide_index=True, column_config={
+        "asof": st.column_config.TextColumn(
+            "asof",
+            help="Monday for which this past report was replayed"),
+        "kind": st.column_config.TextColumn(
+            "kind",
+            help="Alert type: FILL, NOPO, RANK, or AVAIL"),
+        "warehouse": st.column_config.TextColumn(
+            "warehouse",
+            help="Platform warehouse affected by the alert"),
+        "platform": st.column_config.TextColumn(
+            "platform",
+            help="Quick-commerce platform for this alert"),
+        "city": st.column_config.TextColumn(
+            "city",
+            help="City for the affected warehouse"),
+        "n_skus": st.column_config.NumberColumn(
+            "n_skus",
+            help="Number of products grouped in the alert"),
         "at_risk_in_Rupees": st.column_config.NumberColumn(
             "at_risk_in_Rupees", help="Estimated Rs per week at risk on that report date", format="%d"),
         "skus": st.column_config.TextColumn(
-            "skus", help="Joy's internal product codes (SKU = stock keeping unit) in this alert")})
+            "skus", help="Joy's internal product codes (SKU = stock keeping unit) in this alert"),
+        "onset": st.column_config.TextColumn(
+            "onset", help="Date the alert problem was first detected")})
 
 with t_data:
     n = data.notes

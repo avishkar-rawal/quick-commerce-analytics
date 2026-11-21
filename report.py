@@ -201,8 +201,13 @@ def known_table(bt, alerts):
             f"<tr><td>{k['label']}<br><small>{k['who']}</small></td>"
             f"<td>{a.onset:%d %b}</td><td><b>{first:%d %b}</b><br><small>{late} wk after it began"
             f"</small></td><td>{k['noticed_weeks']} wk</td><td>up to {rs(saved)}</td></tr>")
-    return ("<table><tr><th>Problem from the brief</th><th>Began</th><th>Our report would have flagged"
-            "</th><th>Actually noticed after</th><th>Sales that could have been saved (if fixed that day)</th></tr>"
+    return ("<table><tr>"
+            "<th data-tooltip=\"One of the three known problems described in the assignment.\">Problem from the brief</th>"
+            "<th data-tooltip=\"When the problem first began in the data.\">Began</th>"
+            "<th data-tooltip=\"The first Monday replay in which the problem was detected.\">Our report would have flagged</th>"
+            "<th data-tooltip=\"How late the problem was noticed before this tool was built.\">Actually noticed after</th>"
+            "<th data-tooltip=\"Estimated sales that could have been saved if the alert was acted on immediately.\">Sales that could have been saved (if fixed that day)</th>"
+            "</tr>"
             + "".join(rows) + "</table>")
 
 
@@ -213,7 +218,11 @@ def week_table(bt):
     rows = "".join(
         f"<tr><td>{pd.Timestamp(w):%d %b}</td><td>{(bt['asof'] == w).sum()}</td>"
         f"<td>{', '.join(sorted(set(bt[bt['asof'] == w]['warehouse'])))}</td></tr>" for w in allw)
-    return "<table><tr><th>Report date</th><th>Alerts</th><th>Warehouses</th></tr>" + rows + "</table>"
+    return ("<table><tr>"
+            "<th data-tooltip=\"Monday of the replayed report.\">Report date</th>"
+            "<th data-tooltip=\"Number of open alert groups on this report date.\">Alerts</th>"
+            "<th data-tooltip=\"Warehouses that had at least one open alert.\">Warehouses</th>"
+            "</tr>" + rows + "</table>")
 
 
 JS = r'''<script>
@@ -312,6 +321,12 @@ ul{margin:0;padding-left:18px;font-size:13.5px}li span{color:#5a635f}
 table{border-collapse:collapse;width:100%;background:#fff;font-size:13.5px}
 td,th{border:1px solid #e1dbcc;padding:7px 10px;text-align:left;vertical-align:top}
 th{background:#efe9da}
+th[data-tooltip]{position:relative;cursor:help}
+th[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;z-index:1000;
+ left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);width:max-content;
+ max-width:260px;padding:7px 9px;border-radius:6px;background:#1f2937;color:#fff;
+ font-size:12px;font-weight:400;line-height:1.35;text-align:left;
+ box-shadow:0 4px 12px rgba(0,0,0,.18)}
 pre{background:#fff;border:1px solid #e1dbcc;border-radius:8px;padding:12px;white-space:pre-wrap;font:13px/1.45 Consolas,monospace}
 .foot{font-size:13px;color:#6a736f}
 .pill{display:inline-block;background:#fff;border:1px solid #e1dbcc;border-radius:12px;padding:1px 9px;margin:2px;font-size:12.5px}
